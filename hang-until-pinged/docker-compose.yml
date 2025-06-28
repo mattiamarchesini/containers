@@ -1,0 +1,6 @@
+services:
+  hang-until-pinged:
+    build: .
+    image: hang-until-pinged
+    ports:
+      - 8080:8080
