@@ -1,10 +1,19 @@
-FROM debian
+FROM gns3/ubuntu:noble
 
-RUN echo 'deb http://http.us.debian.org/debian stable main contrib non-free' > /etc/apt/sources.list
+# Install pipx and its dependencies
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y python3-pip python3-venv git pipx
 
-RUN apt update
-RUN sudo apt -y install python3 python3-pip pipx qemu-kvm qemu-utils libvirt-clients libvirt-daemon-system virtinst dynamips software-properties-common ca-certificates curl gnupg2
+ENV PIPX_BIN_DIR='/usr/bin/'
+RUN pipx ensurepath
 
+# Install gns3-server using pipx
 RUN pipx install gns3-server
 
-# Access at http://<GNS3_Server_IP>:8000
+# Expose the default GNS3 server port
+EXPOSE 3080
+
+# Default user and password is admin
+
+ENTRYPOINT ["gns3server"]
